@@ -1,47 +1,38 @@
-var chai = require('chai');
-var chaiHttp = require('chai-http');
-var chaiJquery = require('chai-jquery');
-var server = require('../app');
-var should = chai.should();
-
-chai.use(chaiHttp);
+const request = require('supertest');
+const app = require('../app');
+const chai = require('chai');
+const should = chai.should();
 
 describe('Homepage', function() {
   it('should display the homepage at / GET', function(done) {
-    chai.request(server)
+    request(app)
       .get('/')
-      .end(function(err, res){
-        res.should.have.status(200);
+      .expect(200)
+      .end(function(err, res) {
+        if (err) return done(err);
         done();
       });
   });
+
   it('should contain the word Sparta at / GET', function(done) {
-    chai.request(server)
+    request(app)
       .get('/')
-      .end(function(err, res){
-        res.text.should.contain('Sparta')
+      .expect(200)
+      .end(function(err, res) {
+        if (err) return done(err);
+        res.text.should.contain('Sparta');
         done();
       });
   });
 });
 
-//describe('Blog', function() {
-//  it('should display the list of posts at /posts GET', function(done) {
-//    chai.request(server)
-//      .get('/posts')
-//      .end(function(err, res){
-//        res.should.have.status(200);
-//        done();
-//      });
-//  });
-//});
-
 describe('Fibonacci', function() {
   it('should display the correct fibonacci value at /fibonacci/10 GET', function(done) {
-    chai.request(server)
+    request(app)
       .get('/fibonacci/10')
-      .end(function(err, res){
-        res.should.have.status(200);
+      .expect(200)
+      .end(function(err, res) {
+        if (err) return done(err);
         res.text.should.contain('55');
         done();
       });

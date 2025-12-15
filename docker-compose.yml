@@ -1,23 +1,21 @@
-version: '3'
-services: 
-  mongo: 
+services:
+  mongo:
     container_name: mongo
-    image: mongo
+    image: mongo:6.0
     restart: always
-    ports: 
+    ports:
       - "27017:27017"
     volumes:
       - "./data:/data/db"
-      - ./mongod.conf:/etc/mongod.conf
-  
-  nodejs: 
+      #- ./mongod.conf:/etc/mongod.conf # Commented out as it might not exist or be needed with default config
+
+  nodejs:
     build: .
     container_name: dockerised-nodejs
     environment:
       - DB_HOST=mongodb://mongo:27017/posts
-    links: 
+    depends_on:
       - mongo
-    ports: 
+    ports:
       - "3000:3000"
-    #command: node seeds/seed.js
-
+    #command: node seeds/seed.js # You might want to run seeds separately or via entrypoint
